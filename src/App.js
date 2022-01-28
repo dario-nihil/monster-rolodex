@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
+import { CardList } from "./components/card-list/card-list-component";
 import "./App.css";
 
 const MOSTERS_ARRAY = [
@@ -18,13 +19,20 @@ const MOSTERS_ARRAY = [
 ];
 
 function App() {
-  const [monsters, setMonsters] = useState(MOSTERS_ARRAY);
+  const [monsters, setMonsters] = useState([]);
+  useEffect(() => {
+    (async () => {
+      const response = await fetch(
+        "https://jsonplaceholder.typicode.com/users"
+      );
+      const data = await response.json();
+      setMonsters(data);
+    })();
+  }, []);
 
   return (
     <div className="App">
-      {monsters.map((monster) => (
-        <h1 key={monster.id}>{monster.name}</h1>
-      ))}
+      <CardList monsters={monsters} />
     </div>
   );
 }
