@@ -1,25 +1,13 @@
 import { useState, useEffect } from "react";
 
-import { CardList } from "./components/card-list/card-list-component";
+import { CardList } from "./components/card-list/card-list.component";
+import { SearchBox } from "./components/search-box/search-box.component";
 import "./App.css";
-
-const MOSTERS_ARRAY = [
-  {
-    name: "Frankenstein",
-    id: "asc1",
-  },
-  {
-    name: "Dracula",
-    id: "asr1",
-  },
-  {
-    name: "Zombie",
-    id: "as1w",
-  },
-];
 
 function App() {
   const [monsters, setMonsters] = useState([]);
+  const [seacrhField, setSearchField] = useState("");
+
   useEffect(() => {
     (async () => {
       const response = await fetch(
@@ -30,9 +18,18 @@ function App() {
     })();
   }, []);
 
+  const filteredMonsters = monsters.filter((monster) =>
+    monster.name.toLowerCase().includes(seacrhField.toLowerCase())
+  );
+
   return (
     <div className="App">
-      <CardList monsters={monsters} />
+      <h1>Monsters Rolodex</h1>
+      <SearchBox
+        handlerChange={setSearchField}
+        placeholders="search monsters"
+      />
+      <CardList monsters={filteredMonsters} />
     </div>
   );
 }
